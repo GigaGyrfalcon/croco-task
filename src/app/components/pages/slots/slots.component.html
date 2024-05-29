@@ -1,0 +1,16 @@
+<croco-banner></croco-banner>
+<croco-slots-filter
+  [categories]="categories$ | async"
+  [providers]="providers$ | async"
+  [selectedCategory]="selectedCategory()"
+  [selectedProvider]="selectedProvider()"
+  (selectCategory)="selectCategory($event)"
+  (selectProvider)="$event ? selectProvider($event) : selectAllProviders()"
+></croco-slots-filter>
+
+<div class="slots">
+@for (slot of slots$ | async; track slot.game_id) {
+  <croco-slot [slot]="slot"></croco-slot>
+}
+</div>
+
