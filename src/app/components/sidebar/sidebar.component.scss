@@ -1,4 +1,4 @@
-aside.sidebar {
+.sidebar {
   width: 78px;
   min-height: 100vh;
   padding: 10px 0;
@@ -23,9 +23,6 @@ aside.sidebar {
 .sidebar-menu {
   list-style: none;
   padding: 0;
-  &__item {
-    padding: 20px 0;
-  }
   &__link {
     display: flex;
     flex-direction: column;
@@ -34,10 +31,28 @@ aside.sidebar {
     color: #6a7787;
     text-decoration: none;
     row-gap: 10px;
+    position: relative;
+    padding: 20px 0;
+    &::before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 0;
+      border-radius: 0 4px 4px 0;
+      background-color: #15af44;
+      transition: all 0.3s ease;
+    }
     &.active {
       color: #fff;
       .sidebar-menu__icon {
         fill: #fff;
+      }
+      &::before {
+        height: 100%;
       }
     }
   }
