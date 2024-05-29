@@ -1,0 +1,10 @@
+{
+  "/integrations": {
+    "target": "https://cms.crocobet.com/integrations",
+    "secure": false,
+    "pathRewrite": {
+      "^/integrations": ""
+    },
+    "changeOrigin": true
+  }
+}
