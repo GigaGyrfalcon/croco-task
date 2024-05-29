@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
 import {
   SlotsApiCategoryResponse,
@@ -9,41 +9,17 @@ import {
   SlotsApiCategory,
 } from '@schemas/slots-api.schema';
 
-interface LoadingState {
-  slots: boolean;
-  categories: boolean;
-  providers: boolean;
-}
-
-interface ErrorState {
-  slots: string | null;
-  categories: string | null;
-  providers: string | null;
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class SlotsApiService {
-  loading = signal<LoadingState>({
-    slots: false,
-    categories: false,
-    providers: false,
-  });
-
-  error = signal<ErrorState>({
-    slots: null,
-    categories: null,
-    providers: null,
-  });
-
   private readonly http = inject(HttpClient);
 
   fetchCategories() {
     const apiPath = '/integrations/v2/slot/categories?include=games';
     return this.http.get<SlotsApiCategoryResponse>(apiPath).pipe(
       map((data) => data.data.filter(this.filterInvalidCategories)),
-      catchError(this.handleError('categories', 'Failed to load categories'))
+      catchError(this.handleError('Failed to load categories'))
     );
   }
 
@@ -64,25 +40,15 @@ export class SlotsApiService {
     if (!category.multiLangName?.en) {
       return false;
     }
-    return true
+    return true;
   }
 
-  private setLoading(key: keyof LoadingState, value: boolean) {
-    this.loading.set({ ...this.loading(), [key]: value });
-  }
-
-  private setError(key: keyof ErrorState, value: string | null) {
-    this.error.set({ ...this.error(), [key]: value });
-  }
-
-  private handleError(key: keyof LoadingState, errorMessage: string) {
-    return (error: unknown): Observable<never> => {
+  private handleError =
+    (errorMessage: string) =>
+    (error: unknown): Observable<never> => {
       console.error(`${errorMessage}:`, error);
-      this.setError(key, `${errorMessage}: ${JSON.stringify(error, null, 2)}`);
-      this.setLoading(key, false);
       return of();
     };
-  }
 
   fetchProviders() {
     const apiPath =
@@ -90,16 +56,17 @@ export class SlotsApiService {
 
     return this.http.get<SlotsApiProvidersResponse>(apiPath).pipe(
       map((data) => data.data),
-      catchError(this.handleError('categories', 'Failed to load categories'))
+      catchError(this.handleError('Failed to load categories'))
     );
   }
 
   fetchSlots() {
-    const apiPath = 'https://cms.crocobet.com/integrations/v2/slot/providers?include=games';
+    const apiPath =
+      'https://cms.crocobet.com/integrations/v2/slot/providers?include=games';
 
     return this.http.get<SlotsApiAllSlotsResponse>(apiPath).pipe(
       map((data) => data.data),
-      catchError(this.handleError('categories', 'Failed to load categories'))
+      catchError(this.handleError('Failed to load categories'))
     );
   }
 
@@ -108,7 +75,7 @@ export class SlotsApiService {
 
     return this.http.get<SlotsApiSlotsResponse>(apiPath).pipe(
       map((data) => data.data),
-      catchError(this.handleError('categories', 'Failed to load categories'))
+      catchError(this.handleError('Failed to load categories'))
     );
   }
 }

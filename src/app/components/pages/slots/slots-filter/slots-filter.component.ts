@@ -19,8 +19,8 @@ import { IconComponent } from '@shared/components/icon/icon.component';
 export class SlotsFilterComponent {
   categories = input<SlotsApiCategory[] | null>([]);
   providers = input<SlotsApiProvider[] | null>([]);
-  selectedCategory = input<SlotsApiCategory | null>();
-  selectedProvider = input<SlotsApiProvider | null>();
+  selectedCategory = input<string | null>();
+  selectedProvider = input<string | null>();
 
   selectCategory = output<SlotsApiCategory | null>();
   selectProvider = output<SlotsApiProvider | null>();

@@ -60,15 +60,6 @@ export const slotsApiCategorySchema = z.object({
 
 export type SlotsApiCategory = z.infer<typeof slotsApiCategorySchema>;
 
-export const isSlotsApiCategory = (input: unknown): input is SlotsApiCategory => {
-  try {
-    slotsApiCategorySchema.parse(input);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 // Define the slots API schema
 export const slotsApiCategoryResponseSchema = z.object({
   data: z.array(slotsApiCategorySchema),
@@ -117,16 +108,3 @@ export const slotsApiAllSlotsResponseSchema = z.object({
 export type SlotsApiAllSlotsResponse = z.infer<
   typeof slotsApiAllSlotsResponseSchema
 >;
-
-const x = {
-  games: [],
-  iframeH: 720,
-  iframeW: 1280,
-  name: 'EGT',
-  order: 1,
-  provider: 'egt',
-  tags: ['new', 'popular', 'jackpot'],
-  totalGames: 178,
-  type: 'slot',
-  vendor: 'egtgames',
-};

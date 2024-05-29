@@ -6,7 +6,7 @@
       class="slots-filter__item"
       (click)="selectCategory.emit(category)"
       [attr.data-count]="category.totalGames"
-      [class.active]="category.category === selectedCategory()?.category"
+      [class.active]="category.category === selectedCategory()"
     >
       @if (category.icon) {
       <croco-icon
@@ -22,7 +22,7 @@
   <nav class="providers">
     <button
       class="providers__item"
-      [class.active]="null === selectedProvider()?.provider"
+      [class.active]="null === selectedProvider()"
       (click)="selectProvider.emit(null)"
     >
       ALL
@@ -30,7 +30,7 @@
     @for (provider of providers(); track provider.name) {
     <button
       class="providers__item"
-      [class.active]="provider.provider === selectedProvider()?.provider"
+      [class.active]="provider.provider === selectedProvider()"
       (click)="selectProvider.emit(provider)"
     >
       {{ provider.name }}

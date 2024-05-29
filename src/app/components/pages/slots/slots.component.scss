@@ -1,11 +1,8 @@
 .slots {
-  // display: flex;
-  // flex-wrap: wrap;
-  // justify-content: center;
-  margin-top: 8px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 8px;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
@@ -37,7 +34,6 @@
         transition: all 0.3s ease;
       }
     }
-
     &:first-child {
       grid-column: 1/-1;
       grid-row: 1/-1;
