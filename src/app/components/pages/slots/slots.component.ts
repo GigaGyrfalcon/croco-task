@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
+  OnInit,
   inject,
   signal,
 } from '@angular/core';
@@ -23,16 +25,17 @@ import {
   Subscription,
 } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { SlotComponent } from './slot/slot.component';
 
 @Component({
   selector: 'croco-slots',
   standalone: true,
-  imports: [BannerComponent, RouterModule, SlotsFilterComponent, AsyncPipe],
+  imports: [BannerComponent, RouterModule, SlotsFilterComponent, AsyncPipe, SlotComponent],
   templateUrl: './slots.component.html',
   styleUrl: './slots.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SlotsComponent {
+export class SlotsComponent implements OnInit, OnDestroy {
   slotsApiService = inject(SlotsApiService);
   router = inject(Router);
 
@@ -89,24 +92,24 @@ export class SlotsComponent {
     });
   }
 
-  selectCategory(category: SlotsApiCategory | null) {
+  selectCategory(category: string | null) {
     if (!category) {
       this.router.navigate([]);
       return;
     }
-    this.router.navigate([], { queryParams: { category: category.category } });
+    this.router.navigate([], { queryParams: { category } });
   }
 
   selectAllProviders() {
     this.router.navigate([]);
   }
 
-  selectProvider(provider: SlotsApiProvider | null) {
+  selectProvider(provider: string | null) {
     if (!provider) {
       this.router.navigate([]);
       return;
     }
-    this.router.navigate([], { queryParams: { provider: provider.provider } });
+    this.router.navigate([], { queryParams: { provider } });
   }
 
   ngOnDestroy() {

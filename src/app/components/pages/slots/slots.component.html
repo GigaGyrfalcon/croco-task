@@ -10,13 +10,7 @@
 
 <div class="slots">
 @for (slot of slots$ | async; track slot.game_id) {
-  <div class="slots__item">
-    <div class="slots__overlay">
-      <span class="slots__button">Play</span>
-    </div>
-    <img class="slots__image" [src]="slot.image" [alt]="slot.name" />
-    <h3 class="slots__title">{{slot.name}}</h3>
-  </div>
+  <croco-slot [slot]="slot"></croco-slot>
 }
 </div>
 

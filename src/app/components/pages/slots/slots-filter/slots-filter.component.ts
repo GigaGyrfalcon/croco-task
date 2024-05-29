@@ -22,6 +22,6 @@ export class SlotsFilterComponent {
   selectedCategory = input<string | null>();
   selectedProvider = input<string | null>();
 
-  selectCategory = output<SlotsApiCategory | null>();
-  selectProvider = output<SlotsApiProvider | null>();
+  selectCategory = output<string | null>();
+  selectProvider = output<string | null>();
 }

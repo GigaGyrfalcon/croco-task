@@ -4,7 +4,7 @@
     @for (category of categories(); track category.category) {
     <button
       class="slots-filter__item"
-      (click)="selectCategory.emit(category)"
+      (click)="selectCategory.emit(category.category)"
       [attr.data-count]="category.totalGames"
       [class.active]="category.category === selectedCategory()"
     >
@@ -18,7 +18,9 @@
     </button>
     }
   </nav>
-  } @if (providers()) {
+  }
+
+  @if (providers()) {
   <nav class="providers">
     <button
       class="providers__item"
@@ -31,7 +33,7 @@
     <button
       class="providers__item"
       [class.active]="provider.provider === selectedProvider()"
-      (click)="selectProvider.emit(provider)"
+      (click)="selectProvider.emit(provider.provider)"
     >
       {{ provider.name }}
     </button>
