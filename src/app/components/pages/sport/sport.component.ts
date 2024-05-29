@@ -9,7 +9,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SportComponent {
-  constructor() {
-    console.log('SportComponent');
-  }
 }

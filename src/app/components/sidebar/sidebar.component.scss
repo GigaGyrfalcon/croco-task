@@ -31,9 +31,15 @@ aside.sidebar {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: green;
+    color: #6a7787;
     text-decoration: none;
     row-gap: 10px;
+    &.active {
+      color: #fff;
+      .sidebar-menu__icon {
+        fill: #fff;
+      }
+    }
   }
   &__icon {
     fill: #6a7787;
@@ -64,7 +70,6 @@ aside.sidebar {
     color: #fff;
   }
   &__text {
-    color: #6a7787;
     font-size: 14px;
     line-height: 17px;
     font-weight: bold;

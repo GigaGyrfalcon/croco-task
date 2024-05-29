@@ -8,17 +8,17 @@
       [attr.data-count]="category.totalGames"
       [class.active]="category.category === selectedCategory()?.category"
     >
+      @if (category.icon) {
       <croco-icon
         class="slots-filter__icon"
         [svgPath]="category.icon"
       ></croco-icon>
+      }
       <span>{{ category.multiLangName?.en }}</span>
     </button>
     }
   </nav>
-  }
-
-  @if (providers()) {
+  } @if (providers()) {
   <nav class="providers">
     <button
       class="providers__item"

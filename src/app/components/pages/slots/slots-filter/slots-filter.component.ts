@@ -5,6 +5,7 @@ import {
   input,
   output,
 } from '@angular/core';
+import { SlotsApiCategory, SlotsApiProvider } from '@schemas/slots-api.schema';
 import { IconComponent } from '@shared/components/icon/icon.component';
 
 @Component({
@@ -16,11 +17,11 @@ import { IconComponent } from '@shared/components/icon/icon.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SlotsFilterComponent {
-  categories = input<any[] | null>([]);
-  providers = input<any[] | null>([]);
-  selectedCategory = input<any | null>(undefined);
-  selectedProvider = input<any | null>(undefined);
+  categories = input<SlotsApiCategory[] | null>([]);
+  providers = input<SlotsApiProvider[] | null>([]);
+  selectedCategory = input<SlotsApiCategory | null>();
+  selectedProvider = input<SlotsApiProvider | null>();
 
-  selectCategory = output<any | null>();
-  selectProvider = output<any | null>();
+  selectCategory = output<SlotsApiCategory | null>();
+  selectProvider = output<SlotsApiProvider | null>();
 }

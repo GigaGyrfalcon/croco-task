@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, catchError, filter, map, of } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 import {
   SlotsApiCategoryResponse,
   SlotsApiProvidersResponse,
@@ -67,24 +67,6 @@ export class SlotsApiService {
     return true
   }
 
-  // private handleCategoryResponse(data: SlotsApiCategoryResponse) {
-  //   if (isDevMode()) {
-  //     const parsedData = slotsApiCategoryResponseSchema.safeParse(data);
-  //     if (!parsedData.success) {
-  //       this.setError('categories', 'Data parsing failed');
-  //     }
-  //   }
-  //   return this.processCategories(data.data);
-  // }
-
-  // private processCategories(categories: SlotsApiCategory[]) {
-  //   if (Array.isArray(categories)) {
-  //     return categories;
-  //   }
-  //   // this.setError('categories', 'Data is not an array of categories');
-  //   return [];
-  // }
-
   private setLoading(key: keyof LoadingState, value: boolean) {
     this.loading.set({ ...this.loading(), [key]: value });
   }
@@ -122,7 +104,6 @@ export class SlotsApiService {
   }
 
   fetchSlotsByProvider(provider: string) {
-    console.log('fetchSlots', provider);
     const apiPath = `https://cms.crocobet.com/integrations/v2/slot/providers/${provider}`;
 
     return this.http.get<SlotsApiSlotsResponse>(apiPath).pipe(

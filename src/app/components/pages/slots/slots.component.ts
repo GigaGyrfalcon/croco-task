@@ -4,7 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BannerComponent } from '@shared/components/banner/banner.component';
 import { SlotsFilterComponent } from '@components/pages/slots/slots-filter/slots-filter.component';
 import {
@@ -12,15 +12,15 @@ import {
   SlotsApiCategory,
   SlotsApiProvider,
 } from '@schemas/slots-api.schema';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { SlotsApiService } from '@services/slots-api.service';
 import {
-  Subscription,
   Observable,
   combineLatest,
   switchMap,
   of,
   map,
+  shareReplay,
+  Subscription,
 } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 
@@ -34,63 +34,83 @@ import { AsyncPipe } from '@angular/common';
 })
 export class SlotsComponent {
   slotsApiService = inject(SlotsApiService);
+  router = inject(Router);
 
-  selectedCategory = signal<SlotsApiCategory | null>(null);
-  selectedProvider = signal<SlotsApiProvider | null>(null);
+  activatedRoute = inject(ActivatedRoute);
 
-  subscriptions: Subscription[] = [];
+  selectedCategory = signal<string | null>(null);
+  selectedProvider = signal<string | null>(null);
 
-  categories$ = this.slotsApiService.fetchCategories();
-  providers$ = this.slotsApiService.fetchProviders();
+  queryParamsSetSubscription: Subscription | null = null;
+
+  categories$ = this.slotsApiService.fetchCategories().pipe(shareReplay(1));
+  providers$ = this.slotsApiService.fetchProviders().pipe(shareReplay(1));
+
+  queryParamsSet$ = this.activatedRoute.queryParamMap.pipe(
+    map((params) => [params.get('category'), params.get('provider')])
+  )
+
   slots$: Observable<Game[]> = combineLatest([
-    toObservable(this.selectedCategory),
-    toObservable(this.selectedProvider),
+    this.categories$,
+    this.providers$,
+    this.queryParamsSet$
   ]).pipe(
+    map(([categories, providers, [category, provider]]) => {
+      const selectedCategory =
+        categories.find((c) => c.category === category) ?? null;
+      const selectedProvider =
+        providers.find((p) => p.provider === provider) ?? null;
+
+      return [selectedCategory, selectedProvider];
+    }),
     switchMap(([selectedCategory, selectedProvider]) => {
       if (selectedCategory) {
         return of(selectedCategory.games);
       }
-
-      if (!selectedCategory && selectedProvider) {
+      if (!selectedCategory && selectedProvider && selectedProvider.provider) {
         return this.slotsApiService
           .fetchSlotsByProvider(selectedProvider.provider)
           .pipe(map((provider) => provider.games));
       }
-
       if (!selectedCategory && !selectedProvider) {
         return this.slotsApiService
           .fetchSlots()
           .pipe(map((slots) => slots.flatMap((slot) => slot.games)));
       }
-
       return of([]);
-    })
+    }),
+    map((games) => games.slice(0, 30))
   );
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.categories$.subscribe((categories) => {
-        this.selectedCategory.set(categories[0]);
-      })
-    );
+    this.queryParamsSetSubscription = this.queryParamsSet$.subscribe(([category, provider]) => {
+      this.selectedCategory.set(category);
+      this.selectedProvider.set(provider);
+    });
   }
 
-  selectCategory(category: SlotsApiCategory) {
-    this.selectedCategory.set(category);
-    this.selectedProvider.set(null);
+  selectCategory(category: SlotsApiCategory | null) {
+    if (!category) {
+      this.router.navigate([]);
+      return;
+    }
+    this.router.navigate([], { queryParams: { category: category.category } });
   }
 
   selectAllProviders() {
-    this.selectedProvider.set(null);
-    this.selectedCategory.set(null);
+    this.router.navigate([]);
   }
 
-  selectProvider(provider: SlotsApiProvider) {
-    this.selectedProvider.set(provider);
-    this.selectedCategory.set(null);
+  selectProvider(provider: SlotsApiProvider | null) {
+    if (!provider) {
+      this.router.navigate([]);
+      return;
+    }
+    this.router.navigate([], { queryParams: { provider: provider.provider } });
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.queryParamsSetSubscription?.unsubscribe();
   }
+
 }
