@@ -11,8 +11,6 @@ import { BannerComponent } from '@shared/components/banner/banner.component';
 import { SlotsFilterComponent } from '@components/pages/slots/slots-filter/slots-filter.component';
 import {
   Game,
-  SlotsApiCategory,
-  SlotsApiProvider,
 } from '@schemas/slots-api.schema';
 import { SlotsApiService } from '@services/slots-api.service';
 import {
