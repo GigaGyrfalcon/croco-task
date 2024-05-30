@@ -1,0 +1,12 @@
+.full-content {
+  display: flex;
+  flex-direction: row;
+  min-height: calc(100vh - 60px);
+  background-color: #1a1e23;
+  color: white;
+  padding-left: 78px;
+}
+
+.main {
+  padding: 8px;
+}

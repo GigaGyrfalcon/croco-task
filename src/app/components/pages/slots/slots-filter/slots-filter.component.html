@@ -1,0 +1,43 @@
+<div class="filters-wrap">
+  @if (categories()) {
+  <nav class="slots-filter">
+    @for (category of categories(); track category.category) {
+    <button
+      class="slots-filter__item"
+      (click)="selectCategory.emit(category.category)"
+      [attr.data-count]="category.totalGames"
+      [class.active]="category.category === selectedCategory()"
+    >
+      @if (category.icon) {
+      <croco-icon
+        class="slots-filter__icon"
+        [svgPath]="category.icon"
+      ></croco-icon>
+      }
+      <span>{{ category.multiLangName?.en }}</span>
+    </button>
+    }
+  </nav>
+  }
+
+  @if (providers()) {
+  <nav class="providers">
+    <button
+      class="providers__item"
+      [class.active]="null === selectedProvider()"
+      (click)="selectProvider.emit(null)"
+    >
+      ALL
+    </button>
+    @for (provider of providers(); track provider.name) {
+    <button
+      class="providers__item"
+      [class.active]="provider.provider === selectedProvider()"
+      (click)="selectProvider.emit(provider.provider)"
+    >
+      {{ provider.name }}
+    </button>
+    }
+  </nav>
+  }
+</div>
